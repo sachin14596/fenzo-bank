@@ -1,0 +1,23 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Data files (generated, not committed)
+data/
+
+# dbt
+fenzo_dbt/target/
+fenzo_dbt/dbt_packages/
+fenzo_dbt/logs/
+
+# BigQuery credentials
+*.json
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
