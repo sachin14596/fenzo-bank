@@ -1,0 +1,201 @@
+merchant_id,merchant_name,category,mcc_code
+merch_0001,Tesco,groceries,5411
+merch_0002,Sainsbury's,groceries,5411
+merch_0003,Asda,groceries,5411
+merch_0004,Morrisons,groceries,5411
+merch_0005,Lidl,groceries,5411
+merch_0006,Aldi,groceries,5411
+merch_0007,Waitrose,groceries,5411
+merch_0008,Co-op,groceries,5411
+merch_0009,Iceland,groceries,5411
+merch_0010,M&S Food,groceries,5411
+merch_0011,TfL,transport,4111
+merch_0012,National Rail,transport,4112
+merch_0013,Uber,transport,4121
+merch_0014,Trainline,transport,4112
+merch_0015,EasyJet,transport,4511
+merch_0016,British Airways,transport,4511
+merch_0017,Ryanair,transport,4511
+merch_0018,Avanti West Coast,transport,4112
+merch_0019,Greater Anglia,transport,4112
+merch_0020,CrossCountry Trains,transport,4112
+merch_0021,McDonald's,dining,5812
+merch_0022,KFC,dining,5812
+merch_0023,Subway,dining,5812
+merch_0024,Nando's,dining,5812
+merch_0025,Wagamama,dining,5812
+merch_0026,Pret A Manger,dining,5812
+merch_0027,Greggs,dining,5812
+merch_0028,Pizza Hut,dining,5812
+merch_0029,Domino's,dining,5812
+merch_0030,Five Guys,dining,5812
+merch_0031,Netflix,entertainment,7841
+merch_0032,Spotify,entertainment,7922
+merch_0033,Amazon Prime,entertainment,7841
+merch_0034,Disney+,entertainment,7841
+merch_0035,Apple TV+,entertainment,7841
+merch_0036,Sky,entertainment,7922
+merch_0037,Vue Cinema,entertainment,7832
+merch_0038,Odeon,entertainment,7832
+merch_0039,Cineworld,entertainment,7832
+merch_0040,NOW TV,entertainment,7841
+merch_0041,Amazon,shopping,5999
+merch_0042,ASOS,shopping,5691
+merch_0043,Next,shopping,5691
+merch_0044,H&M,shopping,5691
+merch_0045,Zara,shopping,5691
+merch_0046,Primark,shopping,5691
+merch_0047,John Lewis,shopping,5311
+merch_0048,Marks & Spencer,shopping,5311
+merch_0049,Argos,shopping,5999
+merch_0050,Currys,shopping,5734
+merch_0051,British Gas,bills,4900
+merch_0052,EDF Energy,bills,4900
+merch_0053,Thames Water,bills,4941
+merch_0054,BT,bills,4813
+merch_0055,Virgin Media,bills,4813
+merch_0056,Sky Broadband,bills,4813
+merch_0057,Council Tax,bills,9311
+merch_0058,TV Licence,bills,7922
+merch_0059,E.ON,bills,4900
+merch_0060,Scottish Power,bills,4900
+merch_0061,Boots,health,5912
+merch_0062,LloydsPharmacy,health,5912
+merch_0063,Superdrug,health,5912
+merch_0064,BUPA,health,8011
+merch_0065,NHS Prescription,health,5912
+merch_0066,PureGym,health,7941
+merch_0067,The Gym Group,health,7941
+merch_0068,David Lloyd,health,7941
+merch_0069,Holland & Barrett,health,5912
+merch_0070,Vision Express,health,8042
+merch_0071,Merchant 71,bills,4900
+merch_0072,Merchant 72,groceries,5411
+merch_0073,Merchant 73,groceries,5411
+merch_0074,Merchant 74,bills,4900
+merch_0075,Merchant 75,shopping,5999
+merch_0076,Merchant 76,dining,5812
+merch_0077,Merchant 77,dining,5812
+merch_0078,Merchant 78,dining,5812
+merch_0079,Merchant 79,bills,4900
+merch_0080,Merchant 80,groceries,5411
+merch_0081,Merchant 81,bills,4900
+merch_0082,Merchant 82,bills,4900
+merch_0083,Merchant 83,entertainment,7841
+merch_0084,Merchant 84,groceries,5411
+merch_0085,Merchant 85,entertainment,7841
+merch_0086,Merchant 86,transport,4111
+merch_0087,Merchant 87,groceries,5411
+merch_0088,Merchant 88,groceries,5411
+merch_0089,Merchant 89,groceries,5411
+merch_0090,Merchant 90,dining,5812
+merch_0091,Merchant 91,dining,5812
+merch_0092,Merchant 92,entertainment,7841
+merch_0093,Merchant 93,entertainment,7841
+merch_0094,Merchant 94,groceries,5411
+merch_0095,Merchant 95,entertainment,7841
+merch_0096,Merchant 96,dining,5812
+merch_0097,Merchant 97,bills,4900
+merch_0098,Merchant 98,bills,4900
+merch_0099,Merchant 99,bills,4900
+merch_0100,Merchant 100,entertainment,7841
+merch_0101,Merchant 101,transport,4111
+merch_0102,Merchant 102,dining,5812
+merch_0103,Merchant 103,transport,4111
+merch_0104,Merchant 104,entertainment,7841
+merch_0105,Merchant 105,shopping,5999
+merch_0106,Merchant 106,health,5912
+merch_0107,Merchant 107,health,5912
+merch_0108,Merchant 108,groceries,5411
+merch_0109,Merchant 109,health,5912
+merch_0110,Merchant 110,health,5912
+merch_0111,Merchant 111,dining,5812
+merch_0112,Merchant 112,bills,4900
+merch_0113,Merchant 113,transport,4111
+merch_0114,Merchant 114,shopping,5999
+merch_0115,Merchant 115,shopping,5999
+merch_0116,Merchant 116,dining,5812
+merch_0117,Merchant 117,dining,5812
+merch_0118,Merchant 118,health,5912
+merch_0119,Merchant 119,shopping,5999
+merch_0120,Merchant 120,groceries,5411
+merch_0121,Merchant 121,groceries,5411
+merch_0122,Merchant 122,transport,4111
+merch_0123,Merchant 123,groceries,5411
+merch_0124,Merchant 124,shopping,5999
+merch_0125,Merchant 125,health,5912
+merch_0126,Merchant 126,shopping,5999
+merch_0127,Merchant 127,entertainment,7841
+merch_0128,Merchant 128,shopping,5999
+merch_0129,Merchant 129,health,5912
+merch_0130,Merchant 130,groceries,5411
+merch_0131,Merchant 131,bills,4900
+merch_0132,Merchant 132,transport,4111
+merch_0133,Merchant 133,entertainment,7841
+merch_0134,Merchant 134,groceries,5411
+merch_0135,Merchant 135,transport,4111
+merch_0136,Merchant 136,groceries,5411
+merch_0137,Merchant 137,entertainment,7841
+merch_0138,Merchant 138,shopping,5999
+merch_0139,Merchant 139,health,5912
+merch_0140,Merchant 140,bills,4900
+merch_0141,Merchant 141,entertainment,7841
+merch_0142,Merchant 142,health,5912
+merch_0143,Merchant 143,shopping,5999
+merch_0144,Merchant 144,entertainment,7841
+merch_0145,Merchant 145,dining,5812
+merch_0146,Merchant 146,bills,4900
+merch_0147,Merchant 147,groceries,5411
+merch_0148,Merchant 148,groceries,5411
+merch_0149,Merchant 149,bills,4900
+merch_0150,Merchant 150,dining,5812
+merch_0151,Merchant 151,health,5912
+merch_0152,Merchant 152,shopping,5999
+merch_0153,Merchant 153,groceries,5411
+merch_0154,Merchant 154,health,5912
+merch_0155,Merchant 155,dining,5812
+merch_0156,Merchant 156,health,5912
+merch_0157,Merchant 157,groceries,5411
+merch_0158,Merchant 158,transport,4111
+merch_0159,Merchant 159,shopping,5999
+merch_0160,Merchant 160,transport,4111
+merch_0161,Merchant 161,bills,4900
+merch_0162,Merchant 162,health,5912
+merch_0163,Merchant 163,shopping,5999
+merch_0164,Merchant 164,dining,5812
+merch_0165,Merchant 165,shopping,5999
+merch_0166,Merchant 166,shopping,5999
+merch_0167,Merchant 167,dining,5812
+merch_0168,Merchant 168,bills,4900
+merch_0169,Merchant 169,shopping,5999
+merch_0170,Merchant 170,bills,4900
+merch_0171,Merchant 171,bills,4900
+merch_0172,Merchant 172,bills,4900
+merch_0173,Merchant 173,groceries,5411
+merch_0174,Merchant 174,entertainment,7841
+merch_0175,Merchant 175,bills,4900
+merch_0176,Merchant 176,dining,5812
+merch_0177,Merchant 177,entertainment,7841
+merch_0178,Merchant 178,bills,4900
+merch_0179,Merchant 179,dining,5812
+merch_0180,Merchant 180,dining,5812
+merch_0181,Merchant 181,transport,4111
+merch_0182,Merchant 182,transport,4111
+merch_0183,Merchant 183,shopping,5999
+merch_0184,Merchant 184,bills,4900
+merch_0185,Merchant 185,bills,4900
+merch_0186,Merchant 186,entertainment,7841
+merch_0187,Merchant 187,dining,5812
+merch_0188,Merchant 188,bills,4900
+merch_0189,Merchant 189,shopping,5999
+merch_0190,Merchant 190,health,5912
+merch_0191,Merchant 191,health,5912
+merch_0192,Merchant 192,health,5912
+merch_0193,Merchant 193,groceries,5411
+merch_0194,Merchant 194,dining,5812
+merch_0195,Merchant 195,health,5912
+merch_0196,Merchant 196,groceries,5411
+merch_0197,Merchant 197,health,5912
+merch_0198,Merchant 198,shopping,5999
+merch_0199,Merchant 199,transport,4111
+merch_0200,Merchant 200,shopping,5999
