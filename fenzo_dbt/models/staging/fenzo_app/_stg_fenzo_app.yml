@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: stg_fenzo_app__customers
+    description: "One row per customer. Cleaned and typed from raw."
+    columns:
+      - name: customer_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_fenzo_app__accounts
+    description: "One row per account. 15% of customers hold two accounts."
+    columns:
+      - name: account_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customers."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fenzo_app__customers')
+                field: customer_id
+
+  - name: stg_fenzo_app__pots
+    description: "One row per pot. Only active current accounts have pots."
+    columns:
+      - name: pot_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: "Foreign key to accounts."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fenzo_app__accounts')
+                field: account_id
+
+  - name: stg_fenzo_app__events
+    description: "One row per event after deduplication. Append-only event stream — the firehose."
+    columns:
+      - name: event_id
+        description: "Primary key. Deduplicated in staging via QUALIFY ROW_NUMBER()."
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: "Foreign key to accounts."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fenzo_app__accounts')
+                field: account_id
+      - name: event_type
+        description: "Type of event. Closed enum of 10 values."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - account_opened
+                  - card_payment_authorised
+                  - card_payment_settled
+                  - card_payment_declined
+                  - faster_payment_in
+                  - faster_payment_out
+                  - direct_debit_collected
+                  - direct_debit_failed
+                  - fx_conversion
+                  - pot_transfer_in
+                  - pot_transfer_out
+
+  - name: stg_fenzo_app__ledger_snapshots
+    description: "One row per account per month-end. Stated balances — compared against computed balances in reconciliation mart."
+    columns:
+      - name: account_id
+        description: "Foreign key to accounts."
+        tests:
+          - not_null
+      - name: snapshot_date
+        description: "Month-end date of the balance snapshot."
+        tests:
+          - not_null

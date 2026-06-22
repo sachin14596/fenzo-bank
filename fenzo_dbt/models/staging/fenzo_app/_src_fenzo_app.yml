@@ -1,0 +1,70 @@
+version: 2
+
+sources:
+  - name: fenzo_app
+    description: "Raw event stream data landing in BigQuery from Fenzo Bank backend microservices — simulating Monzo's Kafka firehose pattern."
+    database: fenzo-bank
+    schema: raw
+    tables:
+      - name: customers
+        description: "One row per customer. Clean — onboarding data is reliable."
+        columns:
+          - name: customer_id
+            description: "Primary key."
+            tests:
+              - unique
+              - not_null
+
+      - name: accounts
+        description: "One row per account. 15% customers have 2 accounts."
+        columns:
+          - name: account_id
+            description: "Primary key."
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key to customers."
+            tests:
+              - not_null
+
+      - name: pots
+        description: "One row per pot. Only current accounts have pots."
+        columns:
+          - name: pot_id
+            description: "Primary key."
+            tests:
+              - unique
+              - not_null
+          - name: account_id
+            description: "Foreign key to accounts."
+            tests:
+              - not_null
+
+      - name: events
+        description: "Append-only event stream — one row per event. 16.8M rows, 10 event types."
+        columns:
+          - name: event_id
+            description: "Primary key. Note: ~2% rows are duplicates (microservice retry pattern) — deduplicated in staging."
+            tests:
+              - not_null
+          - name: account_id
+            description: "Foreign key to accounts."
+            tests:
+              - not_null
+          - name: event_type
+            description: "Type of event."
+            tests:
+              - not_null
+
+      - name: ledger_snapshots
+        description: "Monthly account balance snapshots. ~2% deliberately mismatched — reconciliation story."
+        columns:
+          - name: account_id
+            description: "Foreign key to accounts."
+            tests:
+              - not_null
+          - name: snapshot_date
+            description: "Month-end date of snapshot."
+            tests:
+              - not_null
