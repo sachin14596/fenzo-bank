@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: int_events_fx_normalised
+    description: "One row per event. Extends stg_fenzo_app__events with GBP-normalised amount via date + currency join to fx_rates seed."
+    columns:
+      - name: event_id
+        description: "Primary key — one row per event."
+        tests:
+          - unique
+          - not_null
+      - name: amount_gbp_minor_units
+        description: "Event amount converted to GBP pence. GBP events unchanged, EUR/USD events multiplied by rate_to_gbp from fx_rates."
+        tests:
+          - not_null
+
+  - name: int_account_daily_movements
+    description: "One row per account per day. Aggregates settled balance-affecting events from int_events_fx_normalised into daily credit, debit, and net movement in GBP pence."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - account_id
+              - movement_date
+    columns:
+      - name: net_movement
+        description: "Net GBP movement for the account on this day. Positive = net inflow, negative = net outflow."
+        tests:
+          - not_null
