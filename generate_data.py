@@ -117,9 +117,22 @@ df_pots.to_csv("data/pots.csv", index=False)
 
 print(f"Done! {len(df_pots)} pots saved to data/pots.csv")
 
+# Load fx_rates for balance check during event generation
+import pandas as pd
+_fx_df = pd.read_csv("fenzo_dbt/seeds/fx_rates.csv")
+_fx_df["rate_date"] = pd.to_datetime(_fx_df["rate_date"]).dt.date
+fx_rates_lookup = {}
+for _, row in _fx_df.iterrows():
+    d = row["rate_date"]
+    c = row["currency"]
+    r = row["rate_to_gbp"]
+    if d not in fx_rates_lookup:
+        fx_rates_lookup[d] = {}
+    fx_rates_lookup[d][c] = r
+
 # ---- EVENTS ----
 import datetime
-
+from collections import defaultdict
 # Date range: 12 months
 start_date = datetime.date(2024, 6, 1)
 end_date = datetime.date(2025, 5, 31)
@@ -147,6 +160,9 @@ event_counter = 1
 # {account_id: [(auth_event_id, amount, merchant_id, auth_date)]}
 # Yeh track karega ki kaunsa auth abhi settle nahi hua
 pending_auths = {}
+
+# Track running balance per account to prevent negative balances
+account_running_balance = defaultdict(int)
 
 for current_date in date_range:
     current_accounts_today = [
@@ -192,6 +208,10 @@ for current_date in date_range:
             amount = -random.randint(50, 50000)
             merchant_id = random.choice(merchant_ids)
 
+            # Skip if insufficient balance
+            if account_running_balance[acc_id] + amount < 0:
+                continue
+
             # ~2% duplicate (microservice retry)
             is_duplicate = random.random() < 0.02
             evt_id = f"evt_{event_counter:08d}" if not is_duplicate else f"evt_{event_counter:08d}_dup"
@@ -208,6 +228,9 @@ for current_date in date_range:
             })
             event_counter += 1
 
+            # Reserve balance immediately on auth
+            account_running_balance[acc_id] += amount
+
             # Pending auths me daalo — 95% settle honge baad me, 5% expire
             will_settle = random.random() > 0.05
             if will_settle:
@@ -218,6 +241,9 @@ for current_date in date_range:
                     "merchant_id": merchant_id,
                     "auth_date": current_date,
                 })
+            else:
+                # 5% expire — release reserved balance
+                account_running_balance[acc_id] -= amount
             continue
 
         # ---- CARD PAYMENT DECLINED ----
@@ -231,7 +257,10 @@ for current_date in date_range:
 
         # ---- FASTER PAYMENT OUT ----
         elif event_type == "faster_payment_out":
-            amount = -random.randint(1000, 200000)
+             amount = -random.randint(1000, 200000)
+             # Skip if insufficient balance
+             if account_running_balance[acc_id] + amount < 0:
+                continue
 
         # ---- DIRECT DEBIT ----
         elif event_type == "direct_debit_collected":
@@ -253,36 +282,51 @@ for current_date in date_range:
                 # 3 din baad retry
                 retry_date = current_date + datetime.timedelta(days=3)
                 if retry_date <= end_date:
-                    events.append({
-                        "event_id": f"evt_{event_counter:08d}",
-                        "event_timestamp": datetime.datetime.combine(
-                            retry_date,
-                            datetime.time(random.randint(6, 10), random.randint(0, 59))
-                        ),
-                        "account_id": acc_id,
-                        "event_type": "direct_debit_collected",
-                        "amount_minor_units": -random.randint(500, 150000),
-                        "currency": "GBP",
-                        "merchant_id": random.choice(merchant_ids),
-                        "pot_id": None,
-                    })
-                    event_counter += 1
+                    retry_amount = -random.randint(500, 150000)
+                    # Skip retry if insufficient balance
+                    if account_running_balance[acc_id] + retry_amount >= 0:
+                        events.append({
+                            "event_id": f"evt_{event_counter:08d}",
+                            "event_timestamp": datetime.datetime.combine(
+                                retry_date,
+                                datetime.time(random.randint(6, 10), random.randint(0, 59))
+                            ),
+                            "account_id": acc_id,
+                            "event_type": "direct_debit_collected",
+                            "amount_minor_units": retry_amount,
+                            "currency": "GBP",
+                            "merchant_id": random.choice(merchant_ids),
+                            "pot_id": None,
+                        })
+                        event_counter += 1
                 continue
             else:
                 amount = -random.randint(500, 150000)
                 merchant_id = random.choice(merchant_ids)
+                # Skip if insufficient balance
+                if account_running_balance[acc_id] + amount < 0:
+                    continue
 
         # ---- FX CONVERSION ----
         elif event_type == "fx_conversion":
             amount = -random.randint(1000, 100000)
             currency = random.choices(["EUR", "USD"], weights=[0.6, 0.4])[0]
+            # Convert to GBP for balance check
+            fx_rate = fx_rates_lookup.get(current_date, {}).get(currency, 1.0)
+            gbp_amount = int(round(amount * fx_rate))
+            # Skip if insufficient balance
+            if account_running_balance[acc_id] + gbp_amount < 0:
+                continue
 
         # ---- POT TRANSFERS ----
         elif event_type in ["pot_transfer_in", "pot_transfer_out"]:
-            if not active_pot_ids:
-                continue
-            pot_id = random.choice(active_pot_ids)
-            amount = random.randint(1000, 50000) if event_type == "pot_transfer_in" else -random.randint(1000, 50000)
+             if not active_pot_ids:
+                 continue
+             pot_id = random.choice(active_pot_ids)
+             amount = random.randint(1000, 50000) if event_type == "pot_transfer_in" else -random.randint(1000, 50000)
+             # Skip pot_transfer_out if insufficient balance
+             if event_type == "pot_transfer_out" and account_running_balance[acc_id] + amount < 0:
+                 continue
 
         events.append({
             "event_id": f"evt_{event_counter:08d}",
@@ -295,6 +339,18 @@ for current_date in date_range:
             "pot_id": pot_id,
         })
         event_counter += 1
+
+        # Update running balance for balance-affecting events
+        if event_type in [
+            "faster_payment_in",
+            "faster_payment_out",
+            "direct_debit_collected",
+            "pot_transfer_in",
+            "pot_transfer_out",
+        ]:
+            account_running_balance[acc_id] += amount
+        elif event_type == "fx_conversion":
+            account_running_balance[acc_id] += gbp_amount
 
     # ---- SETTLED PAYMENTS (pending auths process karo) ----
     # Har din check karo — jo auths 1-5 din purane hain, unhe settle karo
@@ -374,20 +430,6 @@ print("  Building balance lookup from events...")
 
 from collections import defaultdict
 account_daily_balance = defaultdict(lambda: defaultdict(int))
-
-# Load fx_rates seed for GBP conversion
-fx_rates_df = pd.read_csv("fenzo_dbt/seeds/fx_rates.csv")
-fx_rates_df["rate_date"] = pd.to_datetime(fx_rates_df["rate_date"]).dt.date
-
-# Build lookup: {date: {currency: rate}}
-fx_rates_lookup = {}
-for _, row in fx_rates_df.iterrows():
-    date = row["rate_date"]
-    currency = row["currency"]
-    rate = row["rate_to_gbp"]
-    if date not in fx_rates_lookup:
-        fx_rates_lookup[date] = {}
-    fx_rates_lookup[date][currency] = rate
 
 for event in events:
     # Sirf balance-affecting events

@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: dim_accounts
+    description: "One row per account. Complete account dimension including tier, status, and opening dates."
+    columns:
+      - name: account_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_daily_account_movements
+    description: "One row per account per day. Daily credit, debit, and net movement in GBP pence."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - account_id
+              - movement_date
+    columns:
+      - name: account_id
+        description: "Foreign key to dim_accounts."
+        tests:
+          - not_null
+      - name: movement_date
+        description: "Date of the daily movement."
+        tests:
+          - not_null
+      - name: net_movement
+        description: "Net GBP movement for this account on this day."
+        tests:
+          - not_null
+
+  - name: fct_account_balances
+    description: "One row per account per day. Cumulative running balance in GBP pence."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - account_id
+              - balance_date
+    columns:
+      - name: account_id
+        description: "Foreign key to dim_accounts."
+        tests:
+          - not_null
+      - name: balance_date
+        description: "Date of the balance snapshot."
+        tests:
+          - not_null
+      - name: balance
+        description: "Cumulative GBP balance in pence as of this date."
+        tests:
+          - not_null
+
+  - name: fct_reconciliation_breaks
+    description: "One row per account per snapshot date. Compares computed vs stated monthly movements and flags breaks."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - account_id
+              - snapshot_date
+    columns:
+      - name: account_id
+        description: "Foreign key to dim_accounts."
+        tests:
+          - not_null
+      - name: snapshot_date
+        description: "Month-end date of the ledger snapshot."
+        tests:
+          - not_null
+      - name: is_break
+        description: "1 if reconciliation break detected, 0 if clean."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false

@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "One row per customer. Customer dimension with demographics."
+    columns:
+      - name: customer_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_daily_transactions_summary
+    description: "One row per transaction date per spending category. Pre-aggregated for dashboard consumption."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - transaction_date
+              - category
+    columns:
+      - name: transaction_date
+        description: "Date of transactions."
+        tests:
+          - not_null
+      - name: transaction_count
+        description: "Number of transactions on this date for this category."
+        tests:
+          - not_null
+      - name: total_spend_gbp_minor_units
+        description: "Total spend in GBP pence for this date and category."
+        tests:
+          - not_null
