@@ -1,0 +1,19 @@
+version: 2
+
+exposures:
+  - name: fenzo_spending_dashboard
+    type: dashboard
+    maturity: medium
+    url: https://lookerstudio.google.com
+    description: >
+      Looker Studio dashboard showing daily spending by category,
+      account balance trends, and reconciliation health.
+
+    depends_on:
+      - ref('fct_daily_transactions_summary')
+      - ref('fct_account_balances')
+      - ref('fct_reconciliation_breaks')
+
+    owner:
+      name: Sachin
+      email: sachin@fenzo.com

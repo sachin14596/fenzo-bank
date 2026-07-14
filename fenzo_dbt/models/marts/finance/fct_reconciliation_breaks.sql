@@ -60,6 +60,7 @@ final as (
         stated_movement,
         computed_movement,
         computed_movement - stated_movement as difference,
+        {{cents_to_pounds('computed_movement - stated_movement')}} as difference_pounds,
         case
             when abs(computed_movement - stated_movement) > 1000
             then 1 else 0
