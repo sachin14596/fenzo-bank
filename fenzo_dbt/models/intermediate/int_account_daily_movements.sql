@@ -1,3 +1,5 @@
+
+
 with event_source as (
 
     select * from {{ ref('int_events_fx_normalised') }}

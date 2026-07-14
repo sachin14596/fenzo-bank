@@ -21,3 +21,6 @@ fenzo_dbt/logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Internal project docs (not for public repo)
+docs/
