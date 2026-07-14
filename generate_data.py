@@ -149,11 +149,18 @@ event_counter = 1
 pending_auths = {}
 
 for current_date in date_range:
+    current_accounts_today = [
+    a for a in current_accounts
+    if a["opened_at"] <= current_date
+    ]
+
+    if not current_accounts_today:
+        continue
     is_weekend = current_date.weekday() >= 5
     daily_target = int(random.randint(35000, 42000) * (0.6 if is_weekend else 1.0))
 
     for _ in range(daily_target):
-        account = random.choice(current_accounts)
+        account = random.choice(current_accounts_today)
         acc_id = account["account_id"]
 
         # Weighted event type
@@ -368,6 +375,20 @@ print("  Building balance lookup from events...")
 from collections import defaultdict
 account_daily_balance = defaultdict(lambda: defaultdict(int))
 
+# Load fx_rates seed for GBP conversion
+fx_rates_df = pd.read_csv("fenzo_dbt/seeds/fx_rates.csv")
+fx_rates_df["rate_date"] = pd.to_datetime(fx_rates_df["rate_date"]).dt.date
+
+# Build lookup: {date: {currency: rate}}
+fx_rates_lookup = {}
+for _, row in fx_rates_df.iterrows():
+    date = row["rate_date"]
+    currency = row["currency"]
+    rate = row["rate_to_gbp"]
+    if date not in fx_rates_lookup:
+        fx_rates_lookup[date] = {}
+    fx_rates_lookup[date][currency] = rate
+
 for event in events:
     # Sirf balance-affecting events
     if event["event_type"] in [
@@ -380,13 +401,22 @@ for event in events:
         "pot_transfer_out",
     ]:
         event_date = event["event_timestamp"].date()
-        account_daily_balance[event["account_id"]][event_date] += event["amount_minor_units"]
+        currency = event["currency"]
+        amount = event["amount_minor_units"]
+
+        if currency == "GBP":
+            gbp_amount = amount
+        else:
+            rate = fx_rates_lookup.get(event_date, {}).get(currency, 1.0)
+            gbp_amount = int(round(amount * rate))
+
+        account_daily_balance[event["account_id"]][event_date] += gbp_amount
 
 snapshots = []
 
 for account in accounts:
     acc_id = account["account_id"]
-    running_balance = random.randint(10000, 500000)  # Opening balance £100-£5000
+    running_balance = 0  # Start from zero — matches fct_account_balances logic
 
     for snap_date in month_end_dates:
         # Skip if account opened after this snapshot date
