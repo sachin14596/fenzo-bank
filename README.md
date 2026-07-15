@@ -1,4 +1,4 @@
-# 🏦 Fenzo Bank — Analytics Engineering Project
+# 🏦 Fenzo Bank - Analytics Engineering Project
 
 [![dbt](https://img.shields.io/badge/dbt-1.8.2-orange?logo=dbt)](https://www.getdbt.com/)
 [![BigQuery](https://img.shields.io/badge/BigQuery-Google_Cloud-blue?logo=google-cloud)](https://cloud.google.com/bigquery)
@@ -6,7 +6,7 @@
 [![CI/CD](https://github.com/sachin14596/fenzo-bank/actions/workflows/dbt_deploy.yml/badge.svg)](https://github.com/sachin14596/fenzo-bank/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> A production-grade Analytics Engineering project simulating a UK neobank data warehouse — built with **dbt Core**, **Google BigQuery**, and **Looker Studio**. Demonstrates financial reconciliation, incremental modelling, and self-serve analytics at scale.
+> A production-grade Analytics Engineering project simulating a UK neobank data warehouse - built with **dbt Core**, **Google BigQuery**, and **Looker Studio**. Demonstrates financial reconciliation, incremental modelling, and self-serve analytics at scale.
 
 **[📊 Live Dashboard](https://datastudio.google.com/reporting/0fc8b2ec-3896-414f-816d-a5f2467f70c3)** | **[🔍 Key Results](#key-results)**
 
@@ -93,14 +93,14 @@ flowchart LR
 
 ## Business Problem
 
-UK neobanks process millions of financial events daily — card payments, transfers, FX conversions. The core challenge is ensuring that **computed account balances** (derived from event streams) match **stated balances** (from the core banking ledger). Discrepancies indicate data quality issues, system bugs, or potential fraud.
+UK neobanks process millions of financial events daily - card payments, transfers, FX conversions. The core challenge is ensuring that **computed account balances** (derived from event streams) match **stated balances** (from the core banking ledger). Discrepancies indicate data quality issues, system bugs, or potential fraud.
 
 This project simulates that exact problem:
 - **14.7M synthetic events** across 18,000 customers, 12 months of activity
 - A **reconciliation mart** that compares event-derived balances against ledger snapshots
 - Automated **data quality tests** that fail the build if break rate exceeds threshold
 
-> *"Key financial reconciliation processes"* — Monzo AE Job Description
+> Fenzo Bank processes millions of financial events daily across 18,000+ customers. Ensuring data integrity between event-derived balances and the core banking ledger is critical for financial reporting and regulatory compliance.
 
 ---
 
@@ -115,7 +115,7 @@ This project simulates that exact problem:
 | Reconciliation accuracy | **98.9%** genuine mismatch detection |
 | Break rate | **4.04%** (threshold: 5%) |
 | BigQuery cost saving | **~99%** with partition + cluster design |
-| CI/CD | GitHub Actions — PR + deploy workflows |
+| CI/CD | GitHub Actions - PR + deploy workflows |
 
 ---
 
@@ -202,12 +202,12 @@ erDiagram
 | Decision | Rationale |
 |----------|-----------|
 | **Medallion + Kimball** | Staging (Silver) → Intermediate → Dimensional Marts (Gold). Star schema with `fct_` fact tables and `dim_` dimensions |
-| **Month-over-month reconciliation** | Avoids opening balance issues — compares monthly movements, not absolute balances |
-| **`insert_overwrite` incremental strategy** | Designed for append-only event data — replaces partitions, cheaper than `merge` at scale |
-| **`europe-west2` region** | UK data residency — mirrors FCA regulatory requirements for UK financial data |
-| **Auth balance reservation** | Card authorisations immediately reserve balance — prevents impossible negative balances |
-| **Ground truth labelling** | ~2% deliberate ledger mismatches injected at generation — pipeline detects breaks independently, accuracy validated post-hoc |
-| **Service account over OAuth** | Production standard — works in CI/CD without browser interaction |
+| **Month-over-month reconciliation** | Avoids opening balance issues - compares monthly movements, not absolute balances |
+| **`insert_overwrite` incremental strategy** | Designed for append-only event data - replaces partitions, cheaper than `merge` at scale |
+| **`europe-west2` region** | UK data residency - mirrors FCA regulatory requirements for UK financial data |
+| **Auth balance reservation** | Card authorisations immediately reserve balance - prevents impossible negative balances |
+| **Ground truth labelling** | ~2% deliberate ledger mismatches injected at generation - pipeline detects breaks independently, accuracy validated post-hoc |
+| **Service account over OAuth** | Production standard - works in CI/CD without browser interaction |
 
 ---
 
@@ -289,12 +289,12 @@ fenzo-bank/
 
 ## Dashboard
 
-**[📊 Live Dashboard — Looker Studio](https://datastudio.google.com/reporting/0fc8b2ec-3896-414f-816d-a5f2467f70c3)**
+**[📊 Live Dashboard - Looker Studio](https://datastudio.google.com/reporting/0fc8b2ec-3896-414f-816d-a5f2467f70c3)**
 
 3 pages:
-- **Spending Overview** — monthly spending by category
-- **Account Balances** — average daily balance trends
-- **Reconciliation Health** — 4.04% break rate, monthly trend
+- **Spending Overview** - monthly spending by category
+- **Account Balances** - average daily balance trends
+- **Reconciliation Health** - 4.04% break rate, monthly trend
 
 ---
 
