@@ -1,0 +1,54 @@
+name: dbt CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dbt-ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: pip install dbt-bigquery==1.8.2
+
+      - name: Setup GCP credentials
+        run: |
+          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > /tmp/keyfile.json
+
+      - name: Setup dbt profiles
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          fenzo_dbt:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: fenzo-bank
+                dataset: dbt_dev
+                keyfile: /tmp/keyfile.json
+                location: europe-west2
+                threads: 4
+                timeout_seconds: 300
+          EOF
+
+      - name: Install dbt packages
+        run: |
+          cd fenzo_dbt
+          dbt deps
+
+      - name: dbt build (CI - full build)
+        run: |
+          cd fenzo_dbt
+          dbt build
