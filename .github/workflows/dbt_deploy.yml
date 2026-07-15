@@ -59,7 +59,7 @@ jobs:
           dbt docs generate
 
       - name: Upload manifest artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dbt-manifest
           path: fenzo_dbt/target/manifest.json
