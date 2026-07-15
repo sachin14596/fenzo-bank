@@ -20,7 +20,7 @@ flowchart LR
         PY[Python\nFaker + NumPy]
     end
 
-    subgraph Raw["📥 Raw Layer\nBigQuery"]
+    subgraph Raw["📥 Raw Layer — BigQuery"]
         R1[raw.events\n14.7M rows]
         R2[raw.accounts\n20.7k rows]
         R3[raw.customers\n18k rows]
