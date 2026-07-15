@@ -51,7 +51,7 @@ jobs:
       - name: dbt build (full deploy)
         run: |
           cd fenzo_dbt
-          dbt build --exclude snapshots
+          dbt build --exclude resource_type:snapshot
 
       - name: Generate dbt docs
         run: |
