@@ -8,7 +8,7 @@
 
 > A production-grade Analytics Engineering project simulating a UK neobank data warehouse - built with **dbt Core**, **Google BigQuery**, and **Looker Studio**. Demonstrates financial reconciliation, incremental modelling, and self-serve analytics at scale.
 
-**[📊 Live Dashboard](https://datastudio.google.com/reporting/0fc8b2ec-3896-414f-816d-a5f2467f70c3)** | **[🔍 Key Results](#key-results)**
+**[📊 Live Dashboard](https://datastudio.google.com/reporting/0fc8b2ec-3896-414f-816d-a5f2467f70c3)** | **[📖 dbt Docs](https://sachin14596.github.io/fenzo-bank/)** | **[🔍 Key Results](#key-results)**
 
 ---
 
