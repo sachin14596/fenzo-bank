@@ -1,4 +1,4 @@
-# 🏦 Fenzo Bank — Analytics Engineering Portfolio Project
+# 🏦 Fenzo Bank — Analytics Engineering Project
 
 [![dbt](https://img.shields.io/badge/dbt-1.8.2-orange?logo=dbt)](https://www.getdbt.com/)
 [![BigQuery](https://img.shields.io/badge/BigQuery-Google_Cloud-blue?logo=google-cloud)](https://cloud.google.com/bigquery)
