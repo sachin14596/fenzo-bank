@@ -15,12 +15,13 @@
 ## Architecture
 
 ```mermaid
+%%{init: {'theme': 'forest'}}%%
 flowchart LR
     subgraph Generation["🐍 Data Generation"]
         PY[Python\nFaker + NumPy]
     end
 
-    subgraph Raw["📥 Raw Layer — BigQuery"]
+    subgraph Raw["📥 Raw Layer - BigQuery"]
         R1[raw.events\n14.7M rows]
         R2[raw.accounts\n20.7k rows]
         R3[raw.customers\n18k rows]
@@ -87,4 +88,6 @@ flowchart LR
     M5 --> L3
     CI1 -.->|tests on PR| dbt
     CI2 -.->|deploys on merge| dbt
+
+    style M5 fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
