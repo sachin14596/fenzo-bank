@@ -51,4 +51,4 @@ jobs:
       - name: dbt build (CI - full build)
         run: |
           cd fenzo_dbt
-          dbt build
+          dbt build --exclude snapshots
