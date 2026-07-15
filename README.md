@@ -15,7 +15,6 @@
 ## Architecture
 
 ```mermaid
-%%{init: {'theme': 'forest'}}%%
 flowchart LR
     subgraph Generation["🐍 Data Generation"]
         PY[Python\nFaker + NumPy]
@@ -88,6 +87,4 @@ flowchart LR
     M5 --> L3
     CI1 -.->|tests on PR| dbt
     CI2 -.->|deploys on merge| dbt
-
-    style M5 fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
