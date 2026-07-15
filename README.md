@@ -114,7 +114,7 @@ This project simulates that exact problem:
 | Data tests | 59 (58 PASS, 1 WARN, 0 ERROR) |
 | Reconciliation accuracy | **98.9%** genuine mismatch detection |
 | Break rate | **4.04%** (threshold: 5%) |
-| BigQuery cost saving | **~99%** with partition + cluster design |
+| BigQuery optimisation | `cluster_by account_id` on fact tables |
 | CI/CD | GitHub Actions - PR + deploy workflows |
 
 ---
