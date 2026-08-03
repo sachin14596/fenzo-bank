@@ -49,8 +49,10 @@ jobs:
           dbt deps
 
       - name: Download production manifest
-        uses: actions/download-artifact@v4
+        uses: dawidd6/action-download-artifact@v6
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: dbt_deploy.yml
           name: dbt-manifest
           path: fenzo_dbt/prod-artifacts/
         continue-on-error: true
