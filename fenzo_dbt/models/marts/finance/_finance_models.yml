@@ -79,3 +79,43 @@ models:
               arguments:
                 values: [0, 1]
                 quote: false
+                
+  - name: dim_pots
+    description: "One row per pot. Pot dimension including name, target amount, and active status."
+    columns:
+      - name: pot_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: "Foreign key to dim_accounts."
+        tests:
+          - not_null
+
+  - name: fct_pot_activity
+    description: "One row per pot transfer event. Tracks all pot_transfer_in and pot_transfer_out events."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - pot_id
+              - account_id
+              - event_type
+              - event_timestamp
+    columns:
+      - name: pot_id
+        description: "Foreign key to dim_pots."
+        tests:
+          - not_null
+      - name: account_id
+        description: "Foreign key to dim_accounts."
+        tests:
+          - not_null
+      - name: event_type
+        description: "pot_transfer_in or pot_transfer_out."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['pot_transfer_in', 'pot_transfer_out']
